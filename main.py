@@ -48,7 +48,6 @@ html_header = """
         </title>
     </head>
     <body>
-        <h1> User Signup</h1>
 
 """
 #create html footer boilerplate
@@ -97,8 +96,8 @@ signup_form = """
 
 
 class MainHandler(webapp2.RequestHandler):
-    def write_form(self, username='', userError='', invPass='', verError='', email='', email_err=''):
-        self.response.write(html_header +
+    def write_form(self, pagetitle='', username='', userError='', invPass='', verError='', email='', email_err=''):
+        self.response.write(html_header + pagetitle +
                     signup_form %{
                     "username": username,
                     "userError": userError,
@@ -109,13 +108,15 @@ class MainHandler(webapp2.RequestHandler):
                     + html_footer)
 
     def get(self):
-        self.write_form()
+        title = "<h1> User Signup</h1>"
+        self.write_form(title)
 
     def post(self):
         #initiate errors variable as False
         errors = False
 
         #initiate all variables
+        title = "<h1> User Signup</h1>"
         user = self.request.get("username")
         passwordEntered = self.request.get("password")
         verify = self.request.get("verifypassword")
@@ -150,7 +151,7 @@ class MainHandler(webapp2.RequestHandler):
 
         # if any errors, rewrite form with error messages.
         if errors == True:
-            self.write_form(user, usernameError, invalidPasswordError, verifyError, emailaddress, emailError)
+            self.write_form(title, user, usernameError, invalidPasswordError, verifyError, emailaddress, emailError)
         #TO DO if no errors go to welcome page. SUCCESS AT LAST!!!!!!!
         if errors == False:
             self.redirect("/welcome?username="+user)
